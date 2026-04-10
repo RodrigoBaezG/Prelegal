@@ -1,0 +1,110 @@
+# ===========================
+# Python / FastAPI
+# ===========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+*.manifest
+*.spec
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables
+.env.local
+.env.*.local
+*.env
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ruff / linting
+.ruff_cache/
+
+# Alembic
+alembic/versions/__pycache__/
+
+# ===========================
+# Next.js / Node
+# ===========================
+node_modules/
+.next/
+out/
+.nuxt/
+.cache/
+.parcel-cache/
+.turbo/
+
+# Build outputs
+build/
+dist/
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Package manager locks (keep only one — adjust to your preference)
+# yarn.lock
+# package-lock.json
+# pnpm-lock.yaml
+
+# ===========================
+# IDEs & Editors
+# ===========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ===========================
+# Docker
+# ===========================
+*.log
+docker-compose.override.yml
+
+# ===========================
+# Misc
+# ===========================
+*.pem
+*.key
+*.cert
+.terraform/
+*.tfstate
+*.tfstate.backup
