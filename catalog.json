@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Mutual NDA",
+    "description": "A mutual non-disclosure agreement created by a committee of over 40 attorneys representing technology vendors, procurement teams, boutique firms, and Big Law. Covers confidential information exchanged between two parties.",
+    "filename": "templates/Mutual-NDA.md"
+  },
+  {
+    "name": "Mutual NDA Cover Page",
+    "description": "The cover page for the Common Paper Mutual NDA. Used to specify the business-specific terms (parties, dates, governing law) that are incorporated by reference into the Mutual NDA standard terms.",
+    "filename": "templates/Mutual-NDA-coverpage.md"
+  },
+  {
+    "name": "Cloud Service Agreement (CSA)",
+    "description": "A standard agreement for selling and buying cloud software and SaaS products, created by a committee of over 40 attorneys. Covers subscription terms, order forms, and standard terms for cloud service delivery.",
+    "filename": "templates/CSA.md"
+  },
+  {
+    "name": "Design Partner Agreement",
+    "description": "A standard design partner agreement for early-stage product collaborations, created by a committee of over 40 attorneys. Used when a vendor and a prospective customer co-develop or provide feedback on a product before general availability.",
+    "filename": "templates/design-partner-agreement.md"
+  },
+  {
+    "name": "Service Level Agreement (SLA)",
+    "description": "A standard service level agreement designed to be used alongside the Common Paper Cloud Service Agreement (CSA). Defines uptime commitments, incident response times, and remedies for service failures.",
+    "filename": "templates/sla.md"
+  },
+  {
+    "name": "Professional Services Agreement (PSA)",
+    "description": "A standard professional services agreement for engagements involving consulting, implementation, or other bespoke services, created by a committee of over 40 attorneys. Covers statements of work, deliverables, and payment terms.",
+    "filename": "templates/psa.md"
+  },
+  {
+    "name": "Data Processing Agreement (DPA)",
+    "description": "A standard data processing agreement for use when a vendor processes personal data on behalf of a customer, created by a committee of over 40 attorneys. Addresses GDPR, CCPA, and other data protection obligations.",
+    "filename": "templates/DPA.md"
+  },
+  {
+    "name": "Partnership Agreement",
+    "description": "A standard partnership agreement for technology vendor relationships, created by a committee of over 40 attorneys. Covers reseller, referral, and co-sell arrangements between companies.",
+    "filename": "templates/Partnership-Agreement.md"
+  },
+  {
+    "name": "Software License Agreement",
+    "description": "A standard software license agreement for on-premise or downloadable software, created by a committee of over 40 attorneys. Covers license grants, restrictions, support, and order form terms.",
+    "filename": "templates/Software-License-Agreement.md"
+  },
+  {
+    "name": "Pilot Agreement",
+    "description": "A standard short-term pilot or trial agreement that allows a prospective customer to evaluate a product or service before committing to a full commercial contract. Simpler and easier to negotiate than a full CSA or Software License Agreement.",
+    "filename": "templates/Pilot-Agreement.md"
+  },
+  {
+    "name": "Business Associate Agreement (BAA)",
+    "description": "A standard business associate agreement required under HIPAA when a vendor handles protected health information (PHI) on behalf of a covered entity, created by a committee of over 40 attorneys.",
+    "filename": "templates/BAA.md"
+  },
+  {
+    "name": "AI Addendum",
+    "description": "A standard addendum addressing AI-specific terms and obligations, created by a committee of over 40 attorneys. Designed to be attached to a base agreement (such as a CSA or Software License Agreement) when the product or service involves AI or machine learning capabilities.",
+    "filename": "templates/AI-Addendum.md"
+  }
+]
