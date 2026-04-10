@@ -11,7 +11,6 @@ import {
 
 interface Props {
   data: NDAFormData;
-  onBack: () => void;
 }
 
 function formatDate(iso: string): string {
@@ -21,7 +20,7 @@ function formatDate(iso: string): string {
   return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-export default function NDAPreview({ data, onBack }: Props) {
+export default function NDAPreview({ data }: Props) {
   const previewRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
 
@@ -71,40 +70,32 @@ export default function NDAPreview({ data, onBack }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
-      {/* Toolbar */}
-      <div className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+    <div className="min-h-full">
+      {/* Sticky toolbar inside the preview column */}
+      <div className="bg-white border-b border-slate-300 px-5 py-2.5 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+        <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Live Preview</span>
         <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900 transition"
+          onClick={handleDownload}
+          disabled={downloading}
+          className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-semibold rounded-lg transition"
         >
-          ← Back to Form
+          {downloading ? (
+            <>
+              <span className="animate-spin inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full" />
+              Generating…
+            </>
+          ) : (
+            <>↓ Download PDF</>
+          )}
         </button>
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-slate-500">Mutual Non-Disclosure Agreement</span>
-          <button
-            onClick={handleDownload}
-            disabled={downloading}
-            className="flex items-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-semibold rounded-lg transition"
-          >
-            {downloading ? (
-              <>
-                <span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
-                Generating PDF…
-              </>
-            ) : (
-              <>↓ Download PDF</>
-            )}
-          </button>
-        </div>
       </div>
 
       {/* Document */}
-      <div className="max-w-4xl mx-auto py-10 px-4">
+      <div className="py-6 px-4">
         <div
           ref={previewRef}
-          className="bg-white shadow-lg rounded-sm px-16 py-14 font-serif text-slate-900"
-          style={{ fontSize: '13px', lineHeight: '1.8' }}
+          className="bg-white shadow-md rounded-sm px-10 py-10 font-serif text-slate-900"
+          style={{ fontSize: '12px', lineHeight: '1.75' }}
         >
           {/* Title */}
           <h1 className="text-center text-2xl font-bold mb-1 tracking-wide uppercase">
