@@ -1,12 +1,13 @@
 'use client';
 
-import { cloneElement, useRef, useState } from 'react';
+import { cloneElement } from 'react';
 import {
   NDAFormData,
   STANDARD_TERMS,
   getMNDATermText,
   getConfidentialityTermText,
   getStandardTermText,
+  generatePrintHTML,
 } from '@/lib/ndaTemplate';
 
 interface Props {
@@ -21,52 +22,16 @@ function formatDate(iso: string): string {
 }
 
 export default function NDAPreview({ data }: Props) {
-  const previewRef = useRef<HTMLDivElement>(null);
-  const [downloading, setDownloading] = useState(false);
-
-  const handleDownload = async () => {
-    if (!previewRef.current) return;
-    setDownloading(true);
-    try {
-      const { default: html2canvas } = await import('html2canvas');
-      const { default: jsPDF } = await import('jspdf');
-
-      const element = previewRef.current;
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        windowWidth: element.scrollWidth,
-        windowHeight: element.scrollHeight,
-      });
-
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = pageWidth;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      let pageNumber = 1;
-      while (heightLeft > 0) {
-        pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', 0, -(pageHeight * pageNumber), imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-        pageNumber++;
-      }
-
-      const party1 = data.party1Company || 'Party1';
-      const party2 = data.party2Company || 'Party2';
-      pdf.save(`Mutual-NDA_${party1}_${party2}.pdf`);
-    } finally {
-      setDownloading(false);
-    }
+  const handleDownload = () => {
+    const html = generatePrintHTML(data);
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 400);
   };
 
   return (
@@ -76,24 +41,15 @@ export default function NDAPreview({ data }: Props) {
         <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Live Preview</span>
         <button
           onClick={handleDownload}
-          disabled={downloading}
-          className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-semibold rounded-lg transition"
+          className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition"
         >
-          {downloading ? (
-            <>
-              <span className="animate-spin inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full" />
-              Generating…
-            </>
-          ) : (
-            <>↓ Download PDF</>
-          )}
+          ↓ Download PDF
         </button>
       </div>
 
       {/* Document */}
       <div className="py-6 px-4">
         <div
-          ref={previewRef}
           className="bg-white shadow-md rounded-sm px-10 py-10 font-serif text-slate-900"
           style={{ fontSize: '12px', lineHeight: '1.75' }}
         >
