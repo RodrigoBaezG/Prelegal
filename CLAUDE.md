@@ -8,7 +8,7 @@ The available documents are covered in the catalog.json file in the project root
 
 @catalog.json
 
-The current implementation has the V1 foundation in place: Docker-containerised FastAPI backend, statically-served Next.js frontend, SQLite database, and a fake login screen. The Mutual NDA creator prototype (from PL-3) is included in the frontend.
+The current implementation has the V1 foundation (Docker, FastAPI, SQLite, fake login) and an AI chat interface for Mutual NDA creation. The user chats with an AI that extracts field values and populates a live document preview.
 
 ## Development process
 
@@ -67,10 +67,20 @@ Backend available at http://localhost:8000
 - Sign-out button clears flag and returns to `/login`
 - Start/stop scripts for Mac, Linux, and Windows
 
+### Completed (PL-5)
+- Manual NDA form replaced entirely by AI chat panel (left column)
+- Two OpenRouter calls per message: call 1 = conversational reply, call 2 = structured JSON field extraction
+- NDA preview updates live as AI extracts fields; completion banner when all required fields gathered
+- Model: `meta-llama/llama-3.3-70b-instruct:free`
+- `purpose` and `effectiveDate` initialised to `''` so the AI must gather them (not pre-filled)
+- Role field validated as `Literal["user","assistant"]` to block prompt injection
+- `httpx` added to backend dependencies
+
 ### Current API Endpoints
 - `GET /api/health` - Health check
+- `GET /api/chat/greeting` - Returns AI greeting message
+- `POST /api/chat/message` - Accepts `{messages}`, returns `{message, fields}`
 
 ### Pending
-- PL-5: AI chat interface for document creation
 - PL-6: Support for all 11 document types
 - PL-7: Real user authentication and document persistence
