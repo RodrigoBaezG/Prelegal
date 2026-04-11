@@ -10,7 +10,7 @@ router = APIRouter()
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = "meta-llama/llama-3.3-70b-instruct:free"
+MODEL = "openai/gpt-oss-120b:free"
 
 GREETING = (
     "Hi! I'm here to help you draft a Mutual Non-Disclosure Agreement. "
