@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
 from .database import init_db
+from .routers.chat import router as chat_router
 
 STATIC_DIR = os.getenv("STATIC_DIR", "/app/frontend/out")
 
@@ -16,6 +17,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Prelegal API", lifespan=lifespan)
+
+app.include_router(chat_router, prefix="/api/chat")
 
 
 @app.get("/api/health")

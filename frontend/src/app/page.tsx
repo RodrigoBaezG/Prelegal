@@ -2,9 +2,25 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import NDAForm from '@/components/NDAForm';
+import NDAChat from '@/components/NDAChat';
 import NDAPreview from '@/components/NDAPreview';
 import { DEFAULT_NDA_DATA, NDAFormData } from '@/lib/ndaTemplate';
+
+// mndaTermType, confidentialityTermType always have valid enum defaults — not gated here.
+// mndaTermYears and confidentialityTermYears default to '1' which is a valid answer.
+const REQUIRED_FIELDS: (keyof NDAFormData)[] = [
+  'purpose', 'effectiveDate',
+  'governingLaw', 'jurisdiction',
+  'party1Name', 'party1Title', 'party1Company', 'party1NoticeAddress', 'party1Date',
+  'party2Name', 'party2Title', 'party2Company', 'party2NoticeAddress', 'party2Date',
+];
+
+function isComplete(data: NDAFormData): boolean {
+  return REQUIRED_FIELDS.every((f) => {
+    const v = data[f];
+    return typeof v === 'string' && v.trim() !== '';
+  });
+}
 
 export default function Home() {
   const router = useRouter();
@@ -19,7 +35,13 @@ export default function Home() {
     }
   }, [router]);
 
+  function handleFieldsUpdate(fields: Partial<NDAFormData>) {
+    setFormData((prev) => ({ ...prev, ...fields }));
+  }
+
   if (!ready) return null;
+
+  const complete = isComplete(formData);
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
@@ -43,9 +65,9 @@ export default function Home() {
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Left column — form */}
-        <div className="w-2/5 flex-shrink-0 overflow-y-auto border-r border-slate-200 bg-slate-50">
-          <NDAForm data={formData} onChange={setFormData} />
+        {/* Left column — AI chat */}
+        <div className="w-2/5 flex-shrink-0 flex flex-col overflow-hidden border-r border-slate-200">
+          <NDAChat onFieldsUpdate={handleFieldsUpdate} isComplete={complete} />
         </div>
 
         {/* Right column — live preview */}
