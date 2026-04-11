@@ -8,7 +8,7 @@ The available documents are covered in the catalog.json file in the project root
 
 @catalog.json
 
-The current implementation supports all 11 document types via AI chat with full user authentication and document persistence.
+The current implementation has the V1 foundation in place: Docker-containerised FastAPI backend, statically-served Next.js frontend, SQLite database, and a fake login screen. The Mutual NDA creator prototype (from PL-3) is included in the frontend.
 
 ## Development process
 
@@ -56,50 +56,21 @@ Backend available at http://localhost:8000
 
 ## Implementation Status
 
+### Completed (PL-3)
+- Mutual NDA creator prototype (manual form + live preview + browser-print PDF)
+
 ### Completed (PL-4)
-- Docker multi-stage build (Node frontend + Python backend)
-- FastAPI backend with SQLite (fresh DB each container start)
-- Next.js static export served by FastAPI at localhost:8000
-- Auth routes: POST /api/auth/signup, POST /api/auth/signin, POST /api/auth/signout, GET /api/auth/me
-- Start/stop scripts for Mac, Linux, Windows
-- Mutual NDA form with live preview and PDF download
-
-### Completed (PL-5)
-- AI chat interface replaces manual form for NDA creation
-- Uses LiteLLM via OpenRouter with Cerebras inference (gpt-oss-120b model)
-- Structured outputs for reliable field extraction from conversation
-- Live preview updates as AI extracts fields from chat
-- AI greets user, asks questions conversationally, and confirms when complete
-- Download button appears when all required fields are gathered
-
-### Completed (PL-6)
-- Support for all 11 document types from catalog.json
-- AI detects document type from user requests and routes accordingly
-- Dedicated preview/PDF components for Mutual NDA, Cloud Service Agreement, Pilot Agreement
-- Generic preview/PDF components for remaining document types (Design Partner, SLA, Professional Services, Partnership, Software License, DPA, BAA, AI Addendum)
-- Auto-focus chat input after sending messages
-- AI always asks follow-on questions when more information is needed
-
-### Completed (PL-7)
-- Functional user authentication with JWT tokens in HttpOnly cookies
-- User signup and signin with email/password (bcrypt password hashing)
-- Document persistence - users can save documents to their account
-- My Documents modal to view, load, and delete saved documents
-- User menu with sign out functionality
-- New Document button to start fresh
-- Auth context for managing user state across the app
-- Protected document save/load endpoints
+- Docker multi-stage build (Node builds frontend, Python/FastAPI serves it)
+- FastAPI backend with SQLite (fresh DB each container start, stored in `/data/`)
+- Next.js static export served by FastAPI at `localhost:8000`
+- Fake login screen (`/login`) — no real auth, localStorage flag routes user into app
+- Sign-out button clears flag and returns to `/login`
+- Start/stop scripts for Mac, Linux, and Windows
 
 ### Current API Endpoints
-- `POST /api/auth/signup` - Create new user account
-- `POST /api/auth/signin` - Sign in and receive JWT cookie
-- `POST /api/auth/signout` - Clear auth cookie
-- `GET /api/auth/me` - Get current user info
-- `GET /api/documents` - List user's saved documents (auth required)
-- `POST /api/documents` - Save new document (auth required)
-- `GET /api/documents/{id}` - Get specific document (auth required)
-- `PUT /api/documents/{id}` - Update document (auth required)
-- `DELETE /api/documents/{id}` - Delete document (auth required)
-- `GET /api/chat/greeting` - Get AI greeting
-- `POST /api/chat/message` - Send chat message and get AI response
 - `GET /api/health` - Health check
+
+### Pending
+- PL-5: AI chat interface for document creation
+- PL-6: Support for all 11 document types
+- PL-7: Real user authentication and document persistence
