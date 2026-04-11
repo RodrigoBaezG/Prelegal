@@ -19,7 +19,14 @@
       "Bash(git push:*)",
       "Bash(npm test:*)",
       "Bash(node -e \"const j = require\\('./node_modules/jest-config/build/Defaults.js'\\); console.log\\(Object.keys\\(j.default || j\\).filter\\(k => k.toLowerCase\\(\\).includes\\('setup'\\)\\)\\)\")",
-      "Bash(node -e \"const {default: d} = require\\('./node_modules/jest-config/build/index.js'\\); console.log\\(Object.keys\\(d.DEFAULTS\\).filter\\(k => k.toLowerCase\\(\\).includes\\('setup'\\)\\)\\)\")"
+      "Bash(node -e \"const {default: d} = require\\('./node_modules/jest-config/build/index.js'\\); console.log\\(Object.keys\\(d.DEFAULTS\\).filter\\(k => k.toLowerCase\\(\\).includes\\('setup'\\)\\)\\)\")",
+      "mcp__atlassian__getAccessibleAtlassianResources",
+      "Bash(chmod +x scripts/start-mac.sh scripts/stop-mac.sh scripts/start-linux.sh scripts/stop-linux.sh)",
+      "Bash(npm run:*)",
+      "Bash(curl -s \"https://openrouter.ai/api/v1/models\")",
+      "Bash(python -c ':*)",
+      "Bash(docker compose:*)",
+      "Bash(curl:*)"
     ]
   }
 }
