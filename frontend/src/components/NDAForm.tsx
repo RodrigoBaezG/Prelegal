@@ -110,6 +110,7 @@ export default function NDAForm({ data, onChange }: Props) {
               <input
                 type="number"
                 min="1"
+                aria-label="MNDA term years"
                 className="w-20 rounded-lg border border-slate-300 px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={data.mndaTermYears}
                 onChange={(e) => set('mndaTermYears', e.target.value)}
@@ -145,6 +146,7 @@ export default function NDAForm({ data, onChange }: Props) {
               <input
                 type="number"
                 min="1"
+                aria-label="Confidentiality term years"
                 className="w-20 rounded-lg border border-slate-300 px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={data.confidentialityTermYears}
                 onChange={(e) => set('confidentialityTermYears', e.target.value)}
