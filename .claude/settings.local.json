@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const chunks=[]; process.stdin.on\\('data',d=>chunks.push\\(d\\)\\); process.stdin.on\\('end',\\(\\)=>{ const data=JSON.parse\\(chunks.join\\(''\\)\\); const items=JSON.parse\\(data[0].text\\).items; console.log\\(items.map\\(r=>r.name\\).join\\('\\\\n'\\)\\); }\\)\")",
+      "mcp__github__get_file_contents",
+      "Bash(curl -sO \"https://raw.githubusercontent.com/CommonPaper/Mutual-NDA/2a3068b6c0ab6015c440f541d5b215bc3ac2f4cb/Mutual-NDA.md\")",
+      "Bash(curl -sO \"https://raw.githubusercontent.com/CommonPaper/Mutual-NDA/2a3068b6c0ab6015c440f541d5b215bc3ac2f4cb/Mutual-NDA-coverpage.md\")",
+      "Bash(curl -sO \"https://raw.githubusercontent.com/CommonPaper/CSA/4afc1f9d9ebad949a67a9585ed527e19f482492b/CSA.md\")",
+      "Bash(curl -sO \"https://raw.githubusercontent.com/CommonPaper/Design-Partner-Agreement/ff8ed1049d5546ea6bd96a17b4c910d831cde3be/design-partner-agreement.md\")",
+      "Bash(curl -sO \"https://raw.githubusercontent.com/CommonPaper/SLA/5b0e6336f058a66c4976d70ecabf1f5fb9ef3af4/sla.md\")",
+      "Bash(gh pr:*)",
+      "mcp__github__create_pull_request",
+      "mcp__atlassian__getJiraIssue",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "Bash(npm test:*)",
+      "Bash(node -e \"const j = require\\('./node_modules/jest-config/build/Defaults.js'\\); console.log\\(Object.keys\\(j.default || j\\).filter\\(k => k.toLowerCase\\(\\).includes\\('setup'\\)\\)\\)\")",
+      "Bash(node -e \"const {default: d} = require\\('./node_modules/jest-config/build/index.js'\\); console.log\\(Object.keys\\(d.DEFAULTS\\).filter\\(k => k.toLowerCase\\(\\).includes\\('setup'\\)\\)\\)\")"
+    ]
+  }
+}
