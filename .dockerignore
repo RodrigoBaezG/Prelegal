@@ -1,0 +1,9 @@
+**/.git
+**/.next
+**/node_modules
+frontend/out
+**/__pycache__
+**/.venv
+**/.env
+*.md
+scripts/
