@@ -1,6 +1,7 @@
 'use client';
 
 import { cloneElement } from 'react';
+import SaveButton from './SaveButton';
 import {
   NDAFormData,
   STANDARD_TERMS,
@@ -12,6 +13,8 @@ import {
 
 interface Props {
   data: NDAFormData;
+  onSave?: () => void;
+  saveStatus?: 'idle' | 'saving' | 'saved' | 'error';
 }
 
 function formatDate(iso: string): string {
@@ -21,7 +24,7 @@ function formatDate(iso: string): string {
   return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-export default function NDAPreview({ data }: Props) {
+export default function NDAPreview({ data, onSave, saveStatus = 'idle' }: Props) {
   const handleDownload = () => {
     const html = generatePrintHTML(data);
     const blob = new Blob([html], { type: 'text/html' });
@@ -46,12 +49,15 @@ export default function NDAPreview({ data }: Props) {
       {/* Sticky toolbar inside the preview column */}
       <div className="bg-white border-b border-slate-300 px-5 py-2.5 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Live Preview</span>
-        <button
-          onClick={handleDownload}
-          className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition"
-        >
-          ↓ Download PDF
-        </button>
+        <div className="flex items-center gap-2">
+          {onSave && <SaveButton onSave={onSave} saveStatus={saveStatus} />}
+          <button
+            onClick={handleDownload}
+            className="flex items-center gap-2 px-4 py-1.5 bg-[#209dd7] hover:bg-[#1a8bbf] text-white text-sm font-semibold rounded-lg transition"
+          >
+            ↓ Download PDF
+          </button>
+        </div>
       </div>
 
       {/* Document */}
@@ -180,6 +186,14 @@ export default function NDAPreview({ data }: Props) {
             </a>
             .
           </p>
+
+          <div className="mt-8 pt-6 border-t border-slate-200">
+            <p className="text-xs text-slate-500 text-center leading-relaxed">
+              <strong className="font-semibold text-slate-600">Disclaimer:</strong> This document is an AI-generated draft and should be considered a starting point only.
+              It is not legal advice and has not been reviewed by an attorney.
+              Please consult a qualified legal professional before signing or relying on this document.
+            </p>
+          </div>
         </div>
       </div>
     </div>

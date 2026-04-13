@@ -17,7 +17,7 @@ WORKDIR /app
 
 # Copy backend source and install dependencies
 COPY backend/pyproject.toml ./
-RUN uv pip install --system fastapi "uvicorn[standard]" python-multipart httpx
+RUN uv pip install --system fastapi "uvicorn[standard]" python-multipart httpx "bcrypt>=4.0.0" "python-jose[cryptography]"
 
 COPY backend/app ./app
 
