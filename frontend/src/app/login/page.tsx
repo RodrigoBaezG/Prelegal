@@ -8,12 +8,17 @@ export default function LoginPage() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
+    if (mode === 'signup' && password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
     setLoading(true);
 
     const endpoint = mode === 'signup' ? '/api/auth/register' : '/api/auth/login';
@@ -85,6 +90,20 @@ export default function LoginPage() {
             )}
           </div>
 
+          {mode === 'signup' && (
+            <div>
+              <label className="block text-sm font-medium text-[#032147] mb-1.5">Confirm Password</label>
+              <input
+                type="password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#209dd7] focus:border-transparent"
+              />
+            </div>
+          )}
+
           {error && (
             <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2.5">
               {error}
@@ -103,7 +122,7 @@ export default function LoginPage() {
         <p className="text-center text-[#888888] text-xs mt-6">
           {mode === 'signin' ? "Don't have an account?" : 'Already have an account?'}{' '}
           <button
-            onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError(''); }}
+            onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError(''); setConfirmPassword(''); }}
             className="text-[#209dd7] hover:underline font-medium"
           >
             {mode === 'signin' ? 'Sign up' : 'Sign in'}

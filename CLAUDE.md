@@ -8,7 +8,7 @@ The available documents are covered in the catalog.json file in the project root
 
 @catalog.json
 
-The current implementation has the V1 foundation (Docker, FastAPI, SQLite, fake login) and an AI chat interface supporting all 11 document types. The user chats with an AI that detects the desired document type, gathers required fields conversationally, and populates a live document preview.
+The current implementation has real authentication, document persistence, and an AI chat interface supporting all 11 document types. The user chats with an AI that detects the desired document type, gathers required fields conversationally, and populates a live document preview. Documents can be saved and revisited.
 
 ## Development process
 
@@ -87,10 +87,23 @@ Backend available at http://localhost:8000
 - `documentType` validated against `SUPPORTED_DOCS` on backend to prevent hallucinated names
 - Numeric field values coerced to strings before filtering
 
+### Completed (PL-7)
+- Real authentication: bcrypt password hashing + JWT (7-day tokens); register and login endpoints with email uniqueness and minimum password length validation
+- Document persistence: documents table in SQLite; users can save drafts via a "Save Document" button, browse saved docs at `/documents`, open them (restores fields in preview), and delete them
+- Disclaimer footer on all document previews noting documents are AI-generated drafts subject to legal review
+- Polish: user email shown in app header, My Documents nav link, sign-in/sign-up toggle on login page with real error messages, consistent brand-color Download PDF button
+- 11 backend integration tests covering auth and document CRUD
+
 ### Current API Endpoints
 - `GET /api/health` - Health check
 - `GET /api/chat/greeting` - Returns AI greeting listing all supported document types
 - `POST /api/chat/message` - Accepts `{messages, document_type}`, returns `{message, fields}`
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login, returns JWT token
+- `GET /api/documents` - List saved documents for authenticated user
+- `POST /api/documents` - Save a document
+- `GET /api/documents/{id}` - Get a saved document
+- `DELETE /api/documents/{id}` - Delete a saved document
 
 ### Pending
-- PL-7: Real user authentication and document persistence
+- No pending items
