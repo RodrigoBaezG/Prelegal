@@ -1,5 +1,7 @@
 'use client';
 
+import SaveButton from './SaveButton';
+
 // Human-readable labels for all known document fields
 const FIELD_LABELS: Record<string, string> = {
   // Common
@@ -84,6 +86,8 @@ const FIELD_LABELS: Record<string, string> = {
 interface Props {
   documentType: string;
   fields: Record<string, string>;
+  onSave?: () => void;
+  saveStatus?: 'idle' | 'saving' | 'saved' | 'error';
 }
 
 function formatValue(val: string): string {
@@ -97,7 +101,7 @@ function formatValue(val: string): string {
   return val;
 }
 
-export default function GenericPreview({ documentType, fields }: Props) {
+export default function GenericPreview({ documentType, fields, onSave, saveStatus = 'idle' }: Props) {
   const knownKeys = Object.keys(fields).filter(
     (k) => k !== 'documentType' && fields[k]
   );
@@ -161,12 +165,15 @@ export default function GenericPreview({ documentType, fields }: Props) {
       {/* Sticky toolbar */}
       <div className="bg-white border-b border-slate-300 px-5 py-2.5 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Live Preview</span>
-        <button
-          onClick={handleDownload}
-          className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition"
-        >
-          ↓ Download PDF
-        </button>
+        <div className="flex items-center gap-2">
+          {onSave && <SaveButton onSave={onSave} saveStatus={saveStatus} />}
+          <button
+            onClick={handleDownload}
+            className="flex items-center gap-2 px-4 py-1.5 bg-[#209dd7] hover:bg-[#1a8bbf] text-white text-sm font-semibold rounded-lg transition"
+          >
+            ↓ Download PDF
+          </button>
+        </div>
       </div>
 
       <div className="py-6 px-4">
@@ -203,6 +210,14 @@ export default function GenericPreview({ documentType, fields }: Props) {
               <a href="https://creativecommons.org/licenses/by/4.0/" className="underline">CC BY 4.0</a>.
             </p>
           )}
+
+          <div className="mt-8 pt-6 border-t border-slate-200">
+            <p className="text-xs text-slate-500 text-center leading-relaxed">
+              <strong className="font-semibold text-slate-600">Disclaimer:</strong> This document is an AI-generated draft and should be considered a starting point only.
+              It is not legal advice and has not been reviewed by an attorney.
+              Please consult a qualified legal professional before signing or relying on this document.
+            </p>
+          </div>
         </div>
       </div>
     </div>

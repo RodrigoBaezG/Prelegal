@@ -5,14 +5,37 @@ import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const router = useRouter();
+  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Fake login — no real authentication
-    localStorage.setItem('prelegal_authed', '1');
-    router.push('/');
+    setError('');
+    setLoading(true);
+
+    const endpoint = mode === 'signup' ? '/api/auth/register' : '/api/auth/login';
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.detail || 'Something went wrong. Please try again.');
+        return;
+      }
+      localStorage.setItem('prelegal_token', data.token);
+      localStorage.setItem('prelegal_email', data.email);
+      router.replace('/');
+    } catch {
+      setError('Unable to reach the server. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -26,14 +49,16 @@ export default function LoginPage() {
           <span className="text-[#032147] font-bold text-2xl tracking-tight">Prelegal</span>
         </div>
 
-        <h1 className="text-xl font-semibold text-[#032147] mb-1">Welcome back</h1>
-        <p className="text-[#888888] text-sm mb-8">Sign in to your account</p>
+        <h1 className="text-xl font-semibold text-[#032147] mb-1">
+          {mode === 'signin' ? 'Welcome back' : 'Create your account'}
+        </h1>
+        <p className="text-[#888888] text-sm mb-8">
+          {mode === 'signin' ? 'Sign in to your account' : 'Start drafting legal documents in minutes'}
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-[#032147] mb-1.5">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-[#032147] mb-1.5">Email</label>
             <input
               type="email"
               required
@@ -45,34 +70,43 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#032147] mb-1.5">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-[#032147] mb-1.5">Password</label>
             <input
               type="password"
               required
+              minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#209dd7] focus:border-transparent"
             />
+            {mode === 'signup' && (
+              <p className="text-xs text-[#888888] mt-1">Minimum 8 characters</p>
+            )}
           </div>
+
+          {error && (
+            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2.5">
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
-            className="w-full bg-[#753991] hover:bg-[#5f2c75] text-white font-semibold py-2.5 rounded-lg transition-colors text-sm"
+            disabled={loading}
+            className="w-full bg-[#753991] hover:bg-[#5f2c75] disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm"
           >
-            Sign in
+            {loading ? 'Please wait…' : mode === 'signin' ? 'Sign in' : 'Create account'}
           </button>
         </form>
 
         <p className="text-center text-[#888888] text-xs mt-6">
-          Don&apos;t have an account?{' '}
+          {mode === 'signin' ? "Don't have an account?" : 'Already have an account?'}{' '}
           <button
-            onClick={handleSubmit}
+            onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError(''); }}
             className="text-[#209dd7] hover:underline font-medium"
           >
-            Sign up
+            {mode === 'signin' ? 'Sign up' : 'Sign in'}
           </button>
         </p>
       </div>
