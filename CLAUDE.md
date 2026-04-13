@@ -8,7 +8,7 @@ The available documents are covered in the catalog.json file in the project root
 
 @catalog.json
 
-The current implementation has the V1 foundation (Docker, FastAPI, SQLite, fake login) and an AI chat interface for Mutual NDA creation. The user chats with an AI that extracts field values and populates a live document preview.
+The current implementation has the V1 foundation (Docker, FastAPI, SQLite, fake login) and an AI chat interface supporting all 11 document types. The user chats with an AI that detects the desired document type, gathers required fields conversationally, and populates a live document preview.
 
 ## Development process
 
@@ -71,16 +71,26 @@ Backend available at http://localhost:8000
 - Manual NDA form replaced entirely by AI chat panel (left column)
 - Two OpenRouter calls per message: call 1 = conversational reply, call 2 = structured JSON field extraction
 - NDA preview updates live as AI extracts fields; completion banner when all required fields gathered
-- Model: `meta-llama/llama-3.3-70b-instruct:free`
-- `purpose` and `effectiveDate` initialised to `''` so the AI must gather them (not pre-filled)
 - Role field validated as `Literal["user","assistant"]` to block prompt injection
 - `httpx` added to backend dependencies
 
+### Completed (PL-6)
+- Model switched to `openai/gpt-oss-120b:free` (rate-limit workaround)
+- AI detects document type in initial flow, then routes to per-document system prompts
+- Per-document field extraction schemas for all 12 doc types (Mutual NDA, NDA Cover Page, CSA, Design Partner, SLA, PSA, DPA, Partnership, Software License, Pilot, BAA, AI Addendum)
+- `FOLLOW_ON_RULE` in all system prompts ensures AI always asks a follow-up question
+- `GenericPreview` component: field table with human-readable labels, ISO date formatting, iframe-based PDF download
+- Mutual NDA uses rich `NDAPreview`; all other types use `GenericPreview`
+- Fields reset cleanly when user switches document type mid-conversation
+- Initial greeting stripped from messages sent to backend once doc type is known
+- Chat input auto-focuses after every AI response
+- `documentType` validated against `SUPPORTED_DOCS` on backend to prevent hallucinated names
+- Numeric field values coerced to strings before filtering
+
 ### Current API Endpoints
 - `GET /api/health` - Health check
-- `GET /api/chat/greeting` - Returns AI greeting message
-- `POST /api/chat/message` - Accepts `{messages}`, returns `{message, fields}`
+- `GET /api/chat/greeting` - Returns AI greeting listing all supported document types
+- `POST /api/chat/message` - Accepts `{messages, document_type}`, returns `{message, fields}`
 
 ### Pending
-- PL-6: Support for all 11 document types
 - PL-7: Real user authentication and document persistence
