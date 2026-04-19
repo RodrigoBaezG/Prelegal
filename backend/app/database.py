@@ -15,6 +15,7 @@ def get_db():
 
 
 def init_db():
+    os.makedirs(os.path.dirname(DB_PATH) or ".", exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
